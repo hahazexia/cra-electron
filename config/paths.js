@@ -54,8 +54,22 @@ module.exports = {
   appPath: resolveApp('.'),
   appBuild: resolveApp('build'),
   appPublic: resolveApp('public'),
-  appHtml: resolveApp('public/index.html'),
-  appIndexJs: resolveModule(resolveApp, 'src/index'),
+  // appHtml: resolveApp('public/index.html'),
+  // appIndexJs: resolveModule(resolveApp, 'src/index'),
+  appPages: [
+    {
+        name: "index",
+        title: "index",
+        appHtml: resolveApp('public/index.html'),
+        appIndexJs: resolveModule(resolveApp, 'src/index'),
+    },
+    {
+        name: "login",
+        title: "login",
+        appHtml: resolveApp('public/login.html'),
+        appIndexJs: resolveModule(resolveApp, 'src/login'),
+    }
+  ],
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
   appTsConfig: resolveApp('tsconfig.json'),

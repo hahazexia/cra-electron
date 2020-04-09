@@ -13,6 +13,7 @@ const host = process.env.HOST || '0.0.0.0';
 const sockHost = process.env.WDS_SOCKET_HOST;
 const sockPath = process.env.WDS_SOCKET_PATH; // default: '/sockjs-node'
 const sockPort = process.env.WDS_SOCKET_PORT;
+const spawn = require('child_process').spawn;
 
 module.exports = function(proxy, allowedHost) {
   return {
@@ -114,6 +115,13 @@ module.exports = function(proxy, allowedHost) {
         // This registers user provided middleware for proxy reasons
         require(paths.proxySetup)(app);
       }
+      spawn('npm', ['run', 'electron'], {
+        shell: true,
+        env: process.env,
+        stdio: 'inherit'
+      })
+        .on('close', code => process.exit(code))
+        .on('error', spawnError => console.error(spawnError));
     },
     after(app) {
       // Redirect to `PUBLIC_URL` or `homepage` from `package.json` if url not match

@@ -1,38 +1,35 @@
 ## Create React App with electron
 
-cra-electron is a example about how to achieve `create-react-app` with multiple entry points work for `electron`.
+cra-electron 是一个使用 `create-react-app` 配置多入口后可以用来开发 `electron` 应用的例子。
 
-English | [简体中文](./README-zh_CN.md)
+[English](./README.md) | 简体中文
 
-### why
+### 为什么要分享这个例子
 
-I made a electron app with electron and vue. After that I thought about making a electron app with react. And i realized it must be multiple entry points, because there will be several `BrowserWindow` in app. So one `BrowserWindow` will has one react application. That is to say, it has to set up as a multiple page application.
+我之前使用 electron 和 vue 开发了一个 app，后来就想着使用 react 来开发。我知道必须把 react 配置成多入口的，因为 app 中会有多个窗口，每一个窗口都对应了一个 react 应用。也就是说，必须配置一个 react 多页面应用。
 
-Then i found out if i want to make this happen with `create-react-app`, i must `eject` it and change the webpack config , otherwise there is no way to achieve it.
+如果想要使用 `create-react-app` 来实现，那么就必须 `eject` 然后修改它的 webpack 配置，否则没有其他办法。
 
-After that, i search for multiple page application with react, and in `create-react-app` i found this issue: <a href="https://github.com/facebook/create-react-app/issues/1084#issuecomment-538639068">Add more entry points
-#1084</a>. In that issue <a href="https://github.com/iamandrewluca">iamandrewluca</a> make a example about how to achieve multiple entry points with `create-react-app`, here it is: <a href="https://github.com/iamandrewluca/example-cra-multi-entry">example-cra-multi-entry</a>.
+我开始寻找配置 react 多页应用的方法，找了很多方法都不尽如人意。有天我在 `create-react-app` 官方仓库的 issue 里发现了这个：<a href="https://github.com/facebook/create-react-app/issues/1084#issuecomment-538639068">Add more entry points
+#1084</a>。在这个 issue 里 <a href="https://github.com/iamandrewluca">iamandrewluca</a> 这个人写了一个自己的例子来实现 react 多页应用，例子在这里：<a href="https://github.com/iamandrewluca/example-cra-multi-entry">example-cra-multi-entry</a>。
 
-Really thank <a href="https://github.com/iamandrewluca">iamandrewluca</a>, because his example gives me inspiration.
+感谢 <a href="https://github.com/iamandrewluca">iamandrewluca</a>，因为他的例子给了我灵感。
 
-### how
+### 怎样实现
 
-1. install `create-react-app` globally, then run 
+1. 全局安装 react 官方脚手架 `create-react-app`，然后运行下面命令初始化一个新的 react 应用
 
 ```
 npx create-react-app my-app
 ```
 
-to initialize a react app.
-
-2. then run 
+2. 然后运行 `eject` 命令，这会将所有 webpack 配置提取到项目中，这样就可以自定义了。
 
 ```
 npm run eject
 ```
-this will move all configuration directly into your project, so you can meke a custom setup.
 
-3. open `./config/paths.js` change it to this:
+3. 打开 `./config/paths.js` 文件修改
 
 ```js
 // before
@@ -87,11 +84,11 @@ module.exports = {
   publicUrlOrPath,
 };
 ```
-this means change one entry point to two entry points. here are `index` and `login`.
 
-then go to `./public` add new html file for the new entry point. here i add `login.html`. and also, add a new `.js` file in `./src`. here i add `login.js`.
+`./config/paths.js` 文件返回的是 webpack 配置中用到的所有路径，这里修改是将过去的单入口的文件修改成了多个入口。我这里修改前单个入口是`index`，修改后变成两个，`index` 和 `login`。
+修改后去 `./public` 目录添加新的 html 文件与新的入口js对应，我这里添加了 `login.html`。当然，也要在 `./src` 目录下添加新的 `.js` 文件。我这里添加的是 `login.js`。
 
-4. open `./config/webpack.config.js` chenge it:
+4. 打开 `./config/webpack.config.js` 修改，这一步是将 webpack 中有关入口的地方修改成多个。
 
 ```js
 // entry before
@@ -317,7 +314,7 @@ new ManifestPlugin({
 
 ```
 
-5. add new folder `main` to contain main process js file and `webpack.config.main.js` for build production main.js.
+5. 在项目根目录添加 `main` 文件夹来存放主进程 js 文件，并且在 config 目录下添加 `./config/webpack.config.main.js` 文件用来为生产打包编译主进程 js。
 
 ```js
 // ./main/index.js
@@ -465,7 +462,7 @@ module.exports = {
 // );
 ```
 
-6. change package.json, install new package and add a `.env` file for development env `process.env.PORT`
+6. 修改 package.json 文件，安装新的包，并且在项目根目录添加 `.env` 文件，`.env` 文件中是开发环境下多页面的端口号`process.env.PORT`。这里需要注意 package.json 中 babel 属性添加了 `"@babel/preset-env"` 的 preset，这样配合 `@babel/register` 就可以让主进程 js 支持 ES6 之后的新语法。（至今 nodejs 环境中还不能完美支持模块语法 import 和 export）
 
 ```js
 //package.json
@@ -693,7 +690,7 @@ here is new packages:
     "webpack-cli": "^3.3.11",
 ```
 
-7. change `./scripts/start.js` and `./scripts/build.js` and `webpackDevServer.config.js`
+7. 修改 `./scripts/start.js` 、 `./scripts/build.js` 和 `webpackDevServer.config.js` 文件，在 `webpackDevServer.config.js` 中，当开发环境的 devServer 编译好 react 页面启动后就会用另一个子进程启动 electon 主进程 js。
 
 ```js
 // ./scripts/start.js
@@ -784,7 +781,10 @@ before(app, server) {
     },
 ```
 
-8. run it 
+8. 运行应用或者打包
+
+start 命令用来运行本地开发环境
+pack 命令用来打包（我这里只测试了 windows 打包）
 
 ```js
 npm run start // run development
@@ -792,6 +792,6 @@ npm run start // run development
 npm run pack // build for windows
 ```
 
-### attention
+### 注意
 
-when you use `react-router` in it, you may find out `BrowserRouter` will not work，page will be blank. you can only use `HashRouter`, i think this is because electron load local static html file.
+当你引入 `react-router` 后，每个窗口自己的路由独立存在互不影响，但是不能使用 `BrowserRouter` 而只能只有 `HashRouter`, 否则页面会是空白页，不会渲染任何元素，这可能和 electron 加载的是本地 html 文件有关。
