@@ -28,7 +28,7 @@ module.exports = {
 
   output: {
     path: path.join(__dirname, '..'),
-    filename: './build/main.prod.js'
+    filename: './build/index.js'
   },
 
   optimization: {

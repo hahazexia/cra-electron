@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "./",
-  "main": "./build/main.js",
+  "main": "./build/index.js",
   "dependencies": {},
   "scripts": {
     "start": "node scripts/start.js",
