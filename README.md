@@ -475,7 +475,7 @@ module.exports = {
   "version": "0.1.0",
   "private": true,
   "homepage": "./",
-  "main": "./build/main.js",// specify production main process file for electron-builder to pack
+  "main": "./build/index.js",// specify production main process file for electron-builder to pack
   "dependencies": {},
   "scripts": {
     "start": "node scripts/start.js",// run development

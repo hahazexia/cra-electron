@@ -472,7 +472,7 @@ module.exports = {
   "version": "0.1.0",
   "private": true,
   "homepage": "./",
-  "main": "./build/main.js",// specify production main process file for electron-builder to pack
+  "main": "./build/index.js",// specify production main process file for electron-builder to pack
   "dependencies": {},
   "scripts": {
     "start": "node scripts/start.js",// run development
@@ -681,7 +681,7 @@ PORT=3000
 
 ```
 
-here is new packages: 
+这里是新增加的包: 
 
 ```
     "babel-plugin-import": "^1.13.0",
@@ -794,4 +794,4 @@ npm run pack // build for windows
 
 ### 注意
 
-当你引入 `react-router` 后，每个窗口自己的路由独立存在互不影响，但是不能使用 `BrowserRouter` 而只能只有 `HashRouter`, 否则页面会是空白页，不会渲染任何元素，这可能和 electron 加载的是本地 html 文件有关。
+当你引入 `react-router` 后，每个窗口自己的路由独立存在互不影响，但是不能使用 `BrowserRouter` 而只能使用 `HashRouter`, 否则页面会是空白页，不会渲染任何元素，这可能和 electron 加载的是本地 html 文件有关。
